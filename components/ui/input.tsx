@@ -1,22 +1,38 @@
-import * as React from "react";
+// Input com label acima e suporte a erro e dica
+import { InputHTMLAttributes } from 'react'
+import { cn } from '@/lib/utils'
 
-import { cn } from "@/lib/utils";
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label: string
+  error?: string
+  hint?: string
+}
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-  ({ className, type, ...props }, ref) => {
-    return (
+export function Input({ label, error, hint, className, id, ...props }: InputProps) {
+  const inputId = id || label.toLowerCase().replace(/\s+/g, '-')
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label
+        htmlFor={inputId}
+        className="text-xs font-medium uppercase tracking-wider text-[#6B7280]"
+      >
+        {label}
+      </label>
       <input
-        type={type}
+        id={inputId}
         className={cn(
-          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-          className,
+          'w-full bg-[#FFFFFF] border border-[#E5E7EB] rounded-[10px] px-4 py-2.5',
+          'text-sm text-[#111827] placeholder-[#9CA3AF]',
+          'focus:outline-none focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]',
+          'transition-colors duration-150',
+          error && 'border-[#DC2626] focus:border-[#DC2626] focus:ring-[#DC2626]',
+          className
         )}
-        ref={ref}
         {...props}
       />
-    );
-  },
-);
-Input.displayName = "Input";
-
-export { Input };
+      {hint && !error && <p className="text-xs text-[#6B7280]">{hint}</p>}
+      {error && <p className="text-xs text-[#DC2626]">{error}</p>}
+    </div>
+  )
+}
