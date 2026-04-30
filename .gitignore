@@ -40,3 +40,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+CONTEXTO_HUB_DA_FE_v8.md
+PROMPT_SETUP_ANTIGRAVID.md
