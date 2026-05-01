@@ -1,17 +1,19 @@
 'use client'
 
-// Página de login do contribuinte — /entrar/contribuinte
+// Página de cadastro do contribuinte — /entrar/contribuinte/cadastro
 import { useState } from 'react'
 import Link from 'next/link'
-import { User, AlertCircle, Loader2 } from 'lucide-react'
+import { UserPlus, AlertCircle, Loader2 } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
-export default function LoginContribuintePage() {
-  const [email, setEmail]     = useState('')
-  const [senha, setSenha]     = useState('')
-  const [loading, setLoading] = useState(false)
-  const [erro, setErro]       = useState<string | null>(null)
+export default function CadastroContribuintePage() {
+  const [nome, setNome]           = useState('')
+  const [email, setEmail]         = useState('')
+  const [senha, setSenha]         = useState('')
+  const [telefone, setTelefone]   = useState('')
+  const [loading, setLoading]     = useState(false)
+  const [erro, setErro]           = useState<string | null>(null)
 
   // Simula submissão — TODO: integrar com Supabase Auth
   const handleSubmit = async (e: React.FormEvent) => {
@@ -20,7 +22,7 @@ export default function LoginContribuintePage() {
     setErro(null)
     setTimeout(() => {
       setLoading(false)
-      // setErro('E-mail ou senha inválidos.') // descomente para testar estado de erro
+      // setErro('Este e-mail já está em uso.') // descomente para testar estado de erro
     }, 1500)
   }
 
@@ -37,18 +39,34 @@ export default function LoginContribuintePage() {
             {/* Topo do card */}
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 rounded-full bg-[#E3F0FF] flex items-center justify-center">
-                <User size={32} className="text-[#215E9F]" />
+                <UserPlus size={32} className="text-[#215E9F]" />
               </div>
               <h1 className="font-title font-bold text-[24px] text-[#0F172A] mt-4 text-balance">
-                Entrar como Contribuinte
+                Criar conta de Contribuinte
               </h1>
               <p className="font-sans text-[15px] text-[#4B5563] mt-2">
-                Bem-vindo de volta! Acesse sua conta.
+                É rápido e gratuito.
               </p>
             </div>
 
             {/* Formulário */}
             <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5" noValidate>
+
+              {/* Campo nome */}
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="nome" className="font-sans text-[14px] font-medium text-[#0F172A]">
+                  Nome completo
+                </label>
+                <input
+                  id="nome"
+                  type="text"
+                  placeholder="João da Silva"
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-[#E5E7EB] font-sans text-[16px] text-[#0F172A] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#215E9F] focus:ring-[3px] focus:ring-[#215E9F]/15 transition-all duration-150"
+                />
+              </div>
 
               {/* Campo e-mail */}
               <div className="flex flex-col gap-1.5">
@@ -68,24 +86,34 @@ export default function LoginContribuintePage() {
 
               {/* Campo senha */}
               <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="senha" className="font-sans text-[14px] font-medium text-[#0F172A]">
-                    Senha
-                  </label>
-                  <Link
-                    href="/entrar/esqueci-minha-senha"
-                    className="font-sans text-[13px] text-[#215E9F] hover:underline"
-                  >
-                    Esqueceu a senha?
-                  </Link>
-                </div>
+                <label htmlFor="senha" className="font-sans text-[14px] font-medium text-[#0F172A]">
+                  Senha
+                </label>
                 <input
                   id="senha"
                   type="password"
-                  placeholder="Sua senha"
+                  placeholder="Mínimo 8 caracteres"
                   value={senha}
                   onChange={(e) => setSenha(e.target.value)}
                   required
+                  className="w-full px-4 py-3 rounded-lg border border-[#E5E7EB] font-sans text-[16px] text-[#0F172A] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#215E9F] focus:ring-[3px] focus:ring-[#215E9F]/15 transition-all duration-150"
+                />
+                <p className="font-sans text-[12px] text-[#9CA3AF]">
+                  Use ao menos 8 caracteres com letras e números.
+                </p>
+              </div>
+
+              {/* Campo telefone (opcional) */}
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="telefone" className="font-sans text-[14px] font-medium text-[#0F172A]">
+                  Telefone <span className="text-[#9CA3AF] font-normal">(opcional)</span>
+                </label>
+                <input
+                  id="telefone"
+                  type="tel"
+                  placeholder="(81) 99999-9999"
+                  value={telefone}
+                  onChange={(e) => setTelefone(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg border border-[#E5E7EB] font-sans text-[16px] text-[#0F172A] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#215E9F] focus:ring-[3px] focus:ring-[#215E9F]/15 transition-all duration-150"
                 />
               </div>
@@ -105,34 +133,35 @@ export default function LoginContribuintePage() {
                 className="w-full py-3.5 rounded-[10px] bg-[#215E9F] text-white font-sans text-[15px] font-semibold flex items-center justify-center gap-2 hover:bg-[#174472] disabled:opacity-70 disabled:cursor-not-allowed transition-colors duration-200 mt-1"
               >
                 {loading && <Loader2 size={18} className="animate-spin" />}
-                {loading ? 'Entrando...' : 'Entrar'}
+                {loading ? 'Criando conta...' : 'Criar minha conta'}
               </button>
 
-              {/* Separador */}
-              <div className="relative flex items-center gap-3 my-1">
-                <div className="flex-1 h-px bg-[#E5E7EB]" />
-                <span className="font-sans text-[13px] text-[#9CA3AF]">ou</span>
-                <div className="flex-1 h-px bg-[#E5E7EB]" />
-              </div>
-
-              {/* Link de cadastro */}
+              {/* Link de login */}
               <p className="font-sans text-[14px] text-[#4B5563] text-center">
-                Não tem uma conta?{' '}
+                Já tem uma conta?{' '}
                 <Link
-                  href="/entrar/contribuinte/cadastro"
+                  href="/entrar/contribuinte"
                   className="text-[#215E9F] font-semibold hover:underline"
                 >
-                  Cadastre-se gratuitamente
+                  Faça login
                 </Link>
+              </p>
+
+              {/* Termos */}
+              <p className="font-sans text-[12px] text-[#9CA3AF] text-center leading-relaxed">
+                Ao criar sua conta, você concorda com nossos{' '}
+                <Link href="#" className="underline hover:text-[#4B5563] transition-colors">
+                  Termos de Uso
+                </Link>
+                {' '}e{' '}
+                <Link href="#" className="underline hover:text-[#4B5563] transition-colors">
+                  Política de Privacidade
+                </Link>
+                .
               </p>
             </form>
 
-            {/* Rodapé de segurança */}
-            <p className="font-sans text-[12px] text-[#9CA3AF] text-center mt-6">
-              Seus dados são protegidos com criptografia.
-            </p>
           </div>
-
         </div>
       </main>
 
