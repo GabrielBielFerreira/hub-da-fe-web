@@ -2,39 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tokens de cor do Hub da Fé */
+/* ──────────────────────────────────────────
+   Design Tokens — Hub da Fé (light mode fixo)
+   ────────────────────────────────────────── */
 :root {
-  --bg-base: #FFFFFF;
-  --bg-card: #F9FAFB;
-  --bg-elevated: #FFFFFF;
-  --bg-sidebar: #F9FAFB;
-  --primary: #7C3AED;
-  --primary-hover: #6D28D9;
-  --primary-light: #C4B5FD;
-  --primary-subtle: rgba(124, 58, 237, 0.08);
-  --accent: #4F46E5;
-  --text-main: #111827;
-  --text-muted: #6B7280;
-  --text-disabled: #9CA3AF;
-  --success: #16A34A;
-  --warning: #D97706;
-  --danger: #DC2626;
-  --border: #E5E7EB;
-  --border-highlight: #D1D5DB;
+  /* Cores principais */
+  --color-primary:        #215E9F;
+  --color-primary-hover:  #174472;
+  --color-primary-soft:   #E3F0FF;
+
+  /* Acento quente */
+  --color-accent:         #F97316;
+  --color-accent-hover:   #EA580C;
+
+  /* Fundos */
+  --color-bg-base:        #FFFFFF;
+  --color-bg-subtle:      #F5F5F7;
+  --color-bg-dark:        #0F172A;
+
+  /* Textos */
+  --color-text-main:      #0F172A;
+  --color-text-secondary: #4B5563;
+  --color-text-muted:     #9CA3AF;
+  --color-text-light:     #F9FAFB;
+
+  /* Bordas */
+  --color-border:         #E5E7EB;
+
+  /* Sombras */
+  --shadow-card:          0 10px 30px rgba(15, 23, 42, 0.08);
+  --shadow-header:        0 4px 12px rgba(15, 23, 42, 0.04);
+
+  /* Raio padrão */
+  --radius: 0.5rem;
+
+  /* Compatibilidade com tokens antigos do projeto */
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 211 65% 37%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 14% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 25 95% 53%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 211 65% 37%;
 }
 
-/* Scrollbar customizada */
+/* ──────────────────────────────────────
+   Scrollbar customizada
+   ────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-base); }
-::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+::-webkit-scrollbar-track { background: #FFFFFF; }
+::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #215E9F; }
 
 /* Seleção de texto */
 ::selection {
-  background: rgba(124, 58, 237, 0.3);
-  color: #F8FAFC;
+  background: rgba(33, 94, 159, 0.2);
+  color: #0F172A;
 }
 
-/* Transições globais suaves */
-* { transition-property: color, background-color, border-color, opacity;
-    transition-duration: 150ms; transition-timing-function: ease; }
+/* Âncora suave para links internos */
+html {
+  scroll-behavior: smooth;
+}
