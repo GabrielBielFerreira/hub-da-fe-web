@@ -35,7 +35,7 @@ export function Footer() {
       <div className="max-w-[1280px] mx-auto px-6 pt-12 pb-8">
 
         {/* Grid de colunas */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-8">
 
           {/* Coluna 1 — Marca */}
           <div className="flex flex-col gap-4">
@@ -85,7 +85,7 @@ export function Footer() {
         {/* Linha inferior — copyright */}
         <div className="mt-10 pt-6 border-t border-[#F9FAFB]/10">
           <p className="text-center font-sans text-[12px] text-[#F9FAFB]/50">
-            &copy; {new Date().getFullYear()} Hub da Fé. Plataforma independente.
+            &copy; 2026 Hub da Fé. Plataforma independente.
           </p>
         </div>
       </div>

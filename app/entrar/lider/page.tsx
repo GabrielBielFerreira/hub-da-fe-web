@@ -2,26 +2,45 @@
 
 // Página de login do líder — /entrar/lider
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Church, AlertCircle, Loader2, ArrowLeft } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { createClient } from '@/lib/supabase/client'
 
 export default function LoginLiderPage() {
+  const router = useRouter()
   const [email, setEmail]     = useState('')
   const [senha, setSenha]     = useState('')
   const [loading, setLoading] = useState(false)
   const [erro, setErro]       = useState<string | null>(null)
 
-  // Simula submissão — TODO: integrar com Supabase Auth
+  // Login real com Supabase Auth
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setErro(null)
-    setTimeout(() => {
+
+    const supabase = createClient()
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password: senha,
+    })
+
+    if (error) {
       setLoading(false)
-      // setErro('E-mail ou senha inválidos.') // descomente para testar estado de erro
-    }, 1500)
+      setErro(
+        error.message === 'Invalid login credentials'
+          ? 'E-mail ou senha inválidos.'
+          : error.message
+      )
+      return
+    }
+
+    // Login bem-sucedido — redireciona para o painel
+    router.push('/painel')
+    router.refresh()
   }
 
   return (

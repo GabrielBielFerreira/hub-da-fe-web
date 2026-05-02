@@ -16,6 +16,7 @@ import { useParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { igrejasMock } from '@/data/igrejas-mock'
+import { PixSVG, payload } from 'react-qrcode-pix'
 
 // Formata input para exibir como "R$ 0,00"
 function formatarValor(raw: string): string {
@@ -45,6 +46,7 @@ export default function ContribuirPage() {
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState('')
   const [etapa, setEtapa] = useState<'formulario' | 'sucesso'>('formulario')
+  const [pixPayloadStr, setPixPayloadStr] = useState('')
 
   // Estado do botão copiar chave PIX
   const [copiado, setCopiado] = useState(false)
@@ -56,11 +58,11 @@ export default function ContribuirPage() {
     if (erro) setErro('')
   }
 
-  // Copia a chave PIX para o clipboard e troca o ícone por 2s
+  // Copia o payload do PIX Copia e Cola para o clipboard e troca o ícone por 2s
   async function copiarChave() {
-    if (!igreja) return
+    if (!pixPayloadStr) return
     try {
-      await navigator.clipboard.writeText(igreja.chave_pix)
+      await navigator.clipboard.writeText(pixPayloadStr)
       setCopiado(true)
       setTimeout(() => setCopiado(false), 2000)
     } catch {
@@ -78,8 +80,23 @@ export default function ContribuirPage() {
     }
 
     setLoading(true)
-    // Simula chamada assíncrona de 1s
-    await new Promise((res) => setTimeout(res, 1000))
+    
+    // Gera a string do PIX Copia e Cola
+    const numValor = valorEmCentavos(valorFormatado) / 100
+    try {
+      const pixString = payload({
+        pixkey: igreja.chave_pix,
+        merchant: igreja.nome.substring(0, 25),
+        city: igreja.cidade || 'Recife',
+        amount: numValor,
+      })
+      setPixPayloadStr(pixString)
+    } catch (err) {
+      console.error(err)
+    }
+
+    // Simula chamada assíncrona
+    await new Promise((res) => setTimeout(res, 800))
     setLoading(false)
     setEtapa('sucesso')
   }
@@ -242,16 +259,26 @@ export default function ContribuirPage() {
               {/* Card do QR Code */}
               <div className="mt-8 w-full border-2 border-dashed border-[#E5E7EB] rounded-2xl p-8">
                 <div
-                  className="w-[200px] h-[200px] bg-[#F5F5F7] rounded-lg mx-auto
-                    flex flex-col items-center justify-center gap-2"
+                  className="mx-auto flex flex-col items-center justify-center gap-2"
                   role="img"
                   aria-label="QR Code PIX para contribuição"
                 >
-                  <QrCode size={64} className="text-[#215E9F]" aria-hidden="true" />
-                  <span className="font-sans text-[14px] text-[#9CA3AF]">QR Code PIX</span>
+                  {pixPayloadStr ? (
+                    <PixSVG
+                      pixkey={igreja.chave_pix}
+                      merchant={igreja.nome.substring(0, 25)}
+                      city={igreja.cidade || 'Recife'}
+                      amount={valorEmCentavos(valorFormatado) / 100}
+                      size={220}
+                    />
+                  ) : (
+                    <div className="w-[200px] h-[200px] bg-[#F5F5F7] rounded-lg flex flex-col items-center justify-center">
+                      <QrCode size={64} className="text-[#215E9F]" />
+                    </div>
+                  )}
                 </div>
                 <p className="font-sans text-[12px] text-[#9CA3AF] mt-4">
-                  Em produção, o QR Code real será gerado aqui via react-qrcode-pix
+                  Escaneie o QR Code com o aplicativo do seu banco
                 </p>
               </div>
 
@@ -267,19 +294,20 @@ export default function ContribuirPage() {
                   <span className="font-sans text-[16px] text-[#4B5563]">Igreja:</span>
                   <span className="font-sans text-[16px] text-[#0F172A]">{igreja.nome}</span>
                 </div>
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex flex-col">
-                    <span className="font-sans text-[14px] text-[#4B5563]">Chave PIX:</span>
-                    <span className="font-sans text-[14px] text-[#4B5563] break-all">
-                      {igreja.chave_pix}
+                <div className="flex items-center justify-between gap-3 bg-[#F8FAFC] p-4 rounded-xl border border-[#E5E7EB] mt-2">
+                  <div className="flex flex-col overflow-hidden">
+                    <span className="font-sans text-[12px] font-medium text-[#64748B] uppercase tracking-wide">
+                      PIX Copia e Cola
+                    </span>
+                    <span className="font-sans text-[14px] text-[#0F172A] truncate mt-1">
+                      {pixPayloadStr || igreja.chave_pix}
                     </span>
                   </div>
                   <button
                     onClick={copiarChave}
-                    className="flex-shrink-0 p-2 rounded-lg hover:bg-[#E3F0FF] text-[#215E9F]
-                      transition-colors duration-200"
-                    aria-label={copiado ? 'Chave copiada' : 'Copiar chave PIX'}
-                    title={copiado ? 'Copiado!' : 'Copiar chave PIX'}
+                    className="flex-shrink-0 p-3 rounded-lg bg-white border border-[#E5E7EB] hover:border-[#215E9F] hover:text-[#215E9F] text-[#4B5563] shadow-sm transition-all duration-200"
+                    aria-label={copiado ? 'Chave copiada' : 'Copiar PIX copia e cola'}
+                    title={copiado ? 'Copiado!' : 'Copiar PIX copia e cola'}
                   >
                     {copiado ? (
                       <Check size={16} className="text-[#16A34A]" aria-hidden="true" />

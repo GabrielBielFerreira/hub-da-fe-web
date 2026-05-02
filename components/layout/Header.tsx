@@ -52,15 +52,28 @@ export function Header() {
 
           {/* Navegação — apenas desktop */}
           <nav className="hidden md:flex items-center gap-7" aria-label="Navegação principal">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="font-sans text-[14px] font-medium text-[#4B5563] hover:text-[#0F172A] transition-colors duration-200"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isAnchor = link.href.startsWith('/#')
+              const href = isAnchor ? link.href.replace('/', '') : link.href
+
+              return isAnchor ? (
+                <a
+                  key={link.href}
+                  href={href}
+                  className="font-sans text-[14px] font-medium text-[#4B5563] hover:text-[#0F172A] transition-colors duration-200"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={href}
+                  className="font-sans text-[14px] font-medium text-[#4B5563] hover:text-[#0F172A] transition-colors duration-200"
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
           </nav>
 
           {/* Ações — apenas desktop */}
@@ -132,16 +145,30 @@ export function Header() {
 
         {/* Links de navegação */}
         <nav className="flex flex-col px-6 pt-6 gap-1" aria-label="Navegação mobile">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="py-3.5 font-sans text-[16px] font-medium text-[#0F172A] border-b border-[#E5E7EB] last:border-b-0 hover:text-primary transition-colors"
-              onClick={() => setMenuAberto(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isAnchor = link.href.startsWith('/#')
+            const href = isAnchor ? link.href.replace('/', '') : link.href
+
+            return isAnchor ? (
+              <a
+                key={link.href}
+                href={href}
+                className="py-3.5 font-sans text-[16px] font-medium text-[#0F172A] border-b border-[#E5E7EB] last:border-b-0 hover:text-primary transition-colors"
+                onClick={() => setMenuAberto(false)}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={href}
+                className="py-3.5 font-sans text-[16px] font-medium text-[#0F172A] border-b border-[#E5E7EB] last:border-b-0 hover:text-primary transition-colors"
+                onClick={() => setMenuAberto(false)}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
         </nav>
 
         {/* Botões de ação */}

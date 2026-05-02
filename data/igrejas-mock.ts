@@ -6,6 +6,7 @@ export const igrejasMock: Igreja[] = [
     id: '1',
     slug: 'frutificacao',
     nome: 'IA Frutificação',
+    logo: '/images/frutificacao.jpg',
     descricao:
       'A Igreja Adventista Frutificação é uma comunidade cristã comprometida com o crescimento espiritual e o serviço ao próximo no coração de Boa Viagem.',
     missao: 'Levando a palavra de Deus e cultivando frutos de fé na comunidade.',
@@ -46,6 +47,7 @@ export const igrejasMock: Igreja[] = [
     id: '2',
     slug: 'kadosh',
     nome: 'Igreja Kadosh',
+    logo: '/images/kadosh.jpg',
     descricao:
       'A Igreja Kadosh é um ministério dedicado à santidade e ao louvor, servindo a comunidade de Casa Amarela com amor e comprometimento.',
     missao: 'Uma comunidade de fé, esperança e serviço dedicada ao próximo.',
@@ -76,6 +78,7 @@ export const igrejasMock: Igreja[] = [
     id: '3',
     slug: 'nova-alianca',
     nome: 'Comunidade Nova Aliança',
+    logo: '/images/nova-alianca.jpg',
     descricao:
       'A Comunidade Nova Aliança nasceu do desejo de servir a região de Olinda com amor genuíno, unindo famílias em torno da fé e da transformação social.',
     missao: 'Unidos pela fé, servindo com amor e transformando nossa região.',
@@ -93,7 +96,7 @@ export const igrejasMock: Igreja[] = [
     facebook: 'novaaliancaolinda',
     horarios_culto:
       'Culto Domingo: 9h e 18h\nEstudo Bíblico: Terça-feira às 19h\nLouvor e Adoração: Quinta-feira às 20h',
-    chave_pix: 'pix@novaalianca.org.br',
+    chave_pix: 'cnarecife01@gmail.com',
     status: 'aprovada',
     campanhas: [
       {

@@ -35,15 +35,16 @@ export async function updateSession(request: NextRequest) {
   const user = data?.claims
 
   // Rotas protegidas — redireciona para /entrar se não estiver logado
-  const rotasProtegidas = ['/painel', '/minhas-contribuicoes']
-  const estaEmRotaProtegida = rotasProtegidas.some((rota) =>
-    request.nextUrl.pathname.startsWith(rota)
-  )
-
-  if (estaEmRotaProtegida && !user) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/entrar'
-    return NextResponse.redirect(url)
+  if (!user) {
+    if (request.nextUrl.pathname.startsWith('/painel')) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/entrar/lider'
+      return NextResponse.redirect(url)
+    } else if (request.nextUrl.pathname.startsWith('/minhas-contribuicoes')) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/entrar/contribuinte'
+      return NextResponse.redirect(url)
+    }
   }
 
   return supabaseResponse

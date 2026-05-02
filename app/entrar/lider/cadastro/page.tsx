@@ -2,12 +2,15 @@
 
 // Página de cadastro do líder — /entrar/lider/cadastro
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Building2, AlertCircle, Loader2, Info, ArrowLeft } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { createClient } from '@/lib/supabase/client'
 
 export default function CadastroLiderPage() {
+  const router = useRouter()
   const [nome, setNome]         = useState('')
   const [email, setEmail]       = useState('')
   const [senha, setSenha]       = useState('')
@@ -15,15 +18,38 @@ export default function CadastroLiderPage() {
   const [loading, setLoading]   = useState(false)
   const [erro, setErro]         = useState<string | null>(null)
 
-  // Simula submissão — TODO: integrar com Supabase Auth
+  // Cadastro real com Supabase Auth
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setErro(null)
-    setTimeout(() => {
+
+    const supabase = createClient()
+    const { error } = await supabase.auth.signUp({
+      email,
+      password: senha,
+      options: {
+        data: {
+          nome,
+          telefone,
+          intencao: 'lider',
+        },
+      },
+    })
+
+    if (error) {
       setLoading(false)
-      // setErro('Este e-mail já está em uso.') // descomente para testar estado de erro
-    }, 1500)
+      setErro(
+        error.message === 'User already registered'
+          ? 'Este e-mail já está em uso.'
+          : error.message
+      )
+      return
+    }
+
+    // Cadastro bem-sucedido — redireciona para onboarding da igreja
+    router.push('/painel/onboarding-igreja')
+    router.refresh()
   }
 
   return (

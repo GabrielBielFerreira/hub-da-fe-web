@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 import {
   LayoutDashboard,
@@ -13,6 +13,7 @@ import {
   Menu,
   X,
 } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
 
 // Itens de navegação do painel
 const navItems = [
@@ -25,6 +26,7 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   // Verifica se o item está ativo (match exato ou começa com href + /)
@@ -79,9 +81,11 @@ export default function Sidebar() {
 
       {/* Botão Sair */}
       <button
-        onClick={() => {
-          // TODO: Conectar ao Supabase auth.signOut()
-          window.location.href = "/"
+        onClick={async () => {
+          const supabase = createClient()
+          await supabase.auth.signOut()
+          router.push("/")
+          router.refresh()
         }}
         className="flex items-center gap-3 px-4 py-3 rounded-lg text-[#F9FAFB]/50 hover:text-[#F9FAFB]/80 transition-all duration-200"
       >

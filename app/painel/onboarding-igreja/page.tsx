@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Church, Info, Upload, CheckCircle2, Loader2 } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
 
 export default function OnboardingIgrejaPage() {
   const [loading, setLoading] = useState(false)
@@ -36,10 +37,61 @@ export default function OnboardingIgrejaPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    // Simula envio (será substituído por Supabase)
-    await new Promise((r) => setTimeout(r, 1500))
-    setLoading(false)
-    setSuccess(true)
+
+    try {
+      const supabase = createClient()
+      
+      // 1. Pega o usuário logado (Líder)
+      const { data: { user } } = await supabase.auth.getUser()
+      
+      if (!user) {
+        alert("Sessão expirada. Faça login novamente.")
+        setLoading(false)
+        return
+      }
+
+      // 2. Cria um slug a partir do nome
+      const slug = form.nome
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // remove acentos
+        .replace(/[^a-z0-9]+/g, "-") // substitui espaços por hífen
+        .replace(/(^-|-$)+/g, "") // remove hífen das pontas
+
+      // 3. Salva no Supabase (não enviamos chavePix pois não tem na tabela)
+      const { error } = await supabase.from('igrejas').insert({
+        lider_id: user.id,
+        nome: form.nome,
+        slug: slug,
+        descricao: form.descricao,
+        missao: form.missao,
+        endereco: form.endereco,
+        bairro: form.bairro,
+        cidade: form.cidade,
+        estado: form.estado,
+        cep: form.cep,
+        telefone: form.telefone,
+        email_contato: form.email,
+        instagram: form.instagram,
+        facebook: form.facebook,
+        site_url: form.site,
+        horarios_culto: form.horarios,
+      })
+
+      if (error) {
+        console.error("Erro ao salvar igreja:", error)
+        alert("Erro ao cadastrar a igreja: " + error.message)
+        setLoading(false)
+        return
+      }
+
+      setSuccess(true)
+    } catch (err) {
+      console.error(err)
+      alert("Ocorreu um erro inesperado.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   // Tela de sucesso

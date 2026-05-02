@@ -5,25 +5,25 @@ import { MapPin } from 'lucide-react'
 
 const igrejas = [
   {
-    slug:    'ia-frutificacao',
+    slug:    'frutificacao',
     nome:    'Igreja Adventista Frutificação',
     local:   'Boa Vista, Recife — PE',
     missao:  'Transformando vidas através da palavra e do amor ao próximo desde 2005',
-    imagem:  '/images/igreja-1.jpg',
+    imagem:  '/images/frutificacao.jpg',
   },
   {
-    slug:    'iemk-igreja',
+    slug:    'kadosh',
     nome:    'IEMK Igreja',
     local:   'Casa Amarela, Recife — PE',
     missao:  'Uma comunidade de fé, esperança e serviço dedicada ao próximo',
-    imagem:  '/images/igreja-2.jpg',
+    imagem:  '/images/kadosh.jpg',
   },
   {
-    slug:    'nova-alianca-olinda',
+    slug:    'nova-alianca',
     nome:    'Igreja Nova Aliança',
     local:   'Olinda — PE',
     missao:  'Unidos pela fé, servindo com amor e transformando nossa região',
-    imagem:  '/images/igreja-3.jpg',
+    imagem:  '/images/nova-alianca.jpg',
   },
 ]
 
@@ -50,44 +50,51 @@ export function IgrejasDestaque() {
           {igrejas.map((igreja) => (
             <article
               key={igreja.slug}
-              className="bg-white border border-[#E5E7EB] rounded-xl overflow-hidden shadow-card hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300"
+              className="group bg-white border border-[#E5E7EB] rounded-2xl overflow-hidden cursor-pointer
+                transition-all duration-300 hover:-translate-y-1
+                hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] hover:border-[#E3F0FF]
+                flex flex-col"
             >
               {/* Imagem */}
-              <div className="relative aspect-video w-full overflow-hidden">
+              <div className="relative h-[220px] overflow-hidden flex-shrink-0">
                 <Image
                   src={igreja.imagem}
                   alt={`Foto da ${igreja.nome}`}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </div>
 
               {/* Corpo do card */}
-              <div className="p-5">
-                <h3 className="font-title font-semibold text-[18px] text-[#0F172A]">
+              <div className="flex flex-col flex-1 px-5 pt-5 pb-0">
+                <h3 className="font-title font-semibold text-[18px] text-[#0F172A] leading-snug">
                   {igreja.nome}
                 </h3>
-                <div className="flex items-center gap-1.5 mt-1">
-                  <MapPin size={14} className="text-[#4B5563] flex-shrink-0" />
+                <div className="flex items-center gap-1.5 mt-1.5">
+                  <MapPin size={14} className="text-[#9CA3AF] flex-shrink-0" />
                   <span className="font-sans text-[14px] text-[#4B5563]">{igreja.local}</span>
                 </div>
-                <p className="font-sans text-[14px] text-[#4B5563] mt-2 line-clamp-2 leading-relaxed">
+                <p className="font-sans text-[14px] text-[#4B5563] mt-2.5 line-clamp-2 leading-relaxed">
                   {igreja.missao}
                 </p>
               </div>
 
               {/* Rodapé com botões */}
-              <div className="flex gap-3 px-5 py-4 border-t border-[#E5E7EB]">
+              <div className="flex items-center gap-3 px-5 pt-5 pb-5">
                 <Link
                   href={`/igrejas/${igreja.slug}`}
-                  className="flex-1 py-2 rounded-lg border border-primary text-primary font-sans text-[14px] font-medium text-center hover:bg-primary-soft transition-all duration-200"
+                  className="flex-1 py-2.5 rounded-[10px] border border-[1.5px] border-[#215E9F] text-[#215E9F]
+                    font-sans text-[14px] font-semibold text-center
+                    hover:bg-[#E3F0FF] transition-colors duration-200"
                 >
                   Conhecer
                 </Link>
                 <Link
                   href={`/igrejas/${igreja.slug}/contribuir`}
-                  className="flex-1 py-2 rounded-lg bg-accent text-white font-sans text-[14px] font-medium text-center hover:bg-accent-hover transition-all duration-200"
+                  className="flex-1 py-2.5 rounded-[10px] bg-[#F97316] text-white
+                    font-sans text-[14px] font-semibold text-center
+                    hover:bg-[#EA580C] transition-colors duration-200"
                 >
                   Contribuir
                 </Link>
